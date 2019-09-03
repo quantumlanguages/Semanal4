@@ -1,0 +1,62 @@
+\documentclass{article}
+
+% formato
+\usepackage[margin = 1.5cm, letterpaper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}% http://ctan.org/pkg/graphicx
+\usepackage{array}
+\usepackage[table,xcdraw]{xcolor}
+
+% autómatas
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning}
+
+%formato ecuaciones
+\usepackage{amsmath}
+
+% símbolos
+\usepackage{amssymb}
+
+% manejo de tablas
+\usepackage{float}
+
+\begin{document}
+    \title{
+        Lenguajes de Programación \\
+        Ejercicio Semanal 4
+    }
+
+    \author{
+        Sandra del Mar Soto Corderi \\
+        Edgar Quiroz Castañeda
+    }
+
+    \date{
+        5 de septiembre del 2019
+    }
+    
+    \maketitle
+
+    \begin{enumerate}
+        \item {
+            Considera las siguientes expresiones:\\
+                            
+            	$e_1 =_{def} \texttt{if iszero (2 + 5) then let x = 3 in suc (x + 1) end else pred (6 + 4)}$\\
+            	
+            	$e_2 =_{def} \texttt{let x = suc (2} \ast \texttt{1) in let y = pred x in if false then (x + y) else (0} \ast \texttt{ 5) end end}$\\
+            
+            %a)
+            \begin{enumerate}
+            	\item {
+            	Verifica el tipado de $e_1$ y $e_2$, utilizando la semántica estática. Debe mostrar todos los pasos de derivación,        	anotando en cada uno de ellos el nombre de la regla utilizada.
+            	
+            	}
+            	
+            	%b
+            	\item {
+            	Realiza la evaluación formal de $e_1$ y $e_2$ utilizando la semántica operacional ($\rightarrow$). Debe mostrar todos los pasos de derivación, anotando en cada uno de ellos el nombre de la regla utilizada.
+            	}
+            \end{enumerate}
+        }
+    \end{enumerate}
+\end{document}
