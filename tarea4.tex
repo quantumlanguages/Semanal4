@@ -48,7 +48,47 @@
             %a)
             \begin{enumerate}
             	\item {
-            	Verifica el tipado de $e_1$ y $e_2$, utilizando la semántica estática. Debe mostrar todos los pasos de derivación,        	anotando en cada uno de ellos el nombre de la regla utilizada.
+            	Verifica el tipado de $e_1$ y $e_2$, utilizando la semántica estática. Debe mostrar todos los pasos de derivación,        	anotando en cada uno de ellos el nombre de la regla utilizada.\\
+            	
+            	Usaremos los nombres de las reglas mencionadas en las notas:
+            	\begin{flalign*}
+            	&e_1 = if\ iszero(2+5)\ then\ let \ x=3\  in\  suc(x+1)\  end\ else\ pred(6+4):Nat\\
+            	1.\ & \vdash 3:Nat &\mathrm{(tnum)}\\
+            	2.\ & \vdash 2:Nat &\mathrm{(tnum)}\\
+            	3.\ & \vdash 5:Nat &\mathrm{(tnum)}\\
+            	4.\ & \vdash 2+5:Nat &\mathrm{(tsum) 2,3}\\
+            	5.\ & \vdash iszero(2+5):Bool &\mathrm{(tisz) 4}\\
+            	6.\ & \vdash 6:Nat &\mathrm{(tnum)}\\
+            	7.\ & \vdash 4:Nat &\mathrm{(tnum)}\\
+            	8.\ & \vdash 6+4:Nat &\mathrm{(tsum) 6,7}\\
+            	9.\ & \vdash pred(6+4):Nat &\mathrm{(tpred) 8}\\
+            	10.\ & x:Nat \vdash x:Nat &\mathrm{(tvar)}\\
+				11.\ & x:Nat \vdash 1:Nat &\mathrm{(tnum)}\\
+				12.\ & x:Nat \vdash x+1:Nat &\mathrm{(tsum) 10,11}\\
+				13.\ & x:Nat \vdash suc(x+1):Nat &\mathrm{(tsuc) 12}\\
+				14.\ & \vdash let \ x=3\  in\  suc(x+1)\  end:Nat &\mathrm{(tlet) 1,13}\\
+            	15.\ & \vdash if\ iszero(2+5)\ then\ let \ x=3\  in\  suc(x+1)\  end\ else\ pred(6+4):Nat &\mathrm{(tif) 5, 9, 14}
+            	\end{flalign*}
+            	
+            	\begin{flalign*}
+            	&e_2 = let\  x = suc (2 \ast 1)\  in\  let\  y = pred\  x\  in\  if\  false\  then\  (x + y)\  else\  (0 \ast 5)\  end\  end:Nat\\
+            	1.\ & \vdash 2:Nat &\mathrm{(tnum)}\\
+            	2.\ & \vdash 1:Nat &\mathrm{(tnum)}\\
+            	3.\ & \vdash 2 \ast 1:Nat &\mathrm{(tprod) 1,2}\\
+            	4.\ & \vdash suc(2 \ast 1):Nat &\mathrm{(tsuc) 3}\\
+            	5.\ & x:Nat \vdash x:Nat:Nat &\mathrm{(tvar)}\\
+            	6.\ & x:Nat \vdash pred\ x:Nat &\mathrm{(tpred) 5}\\
+            	7.\ & x, y:Nat \vdash y:Nat &\mathrm{(tvar)}\\
+            	8.\ & x, y:Nat \vdash x:Nat &\mathrm{(tvar)}\\
+            	9.\ & x, y:Nat \vdash x+y:Nat &\mathrm{(tsum) 7,8}\\
+            	10.\ & x, y:Nat \vdash bool[false]:Bool &\mathrm{(tfalse)}\\
+            	11.\ & x, y:Nat \vdash 0:Nat &\mathrm{(tnum)}\\
+            	12.\ & x, y:Nat \vdash 5:Nat &\mathrm{(tnum)}\\
+            	13.\ & x, y:Nat \vdash 0 \ast 5:Nat &\mathrm{(tprod)11, 12}\\
+            	14.\ & x, y:Nat \vdash if\  false\  then\  (x + y)\  else\  (0 \ast 5)\:Nat &\mathrm{(tif) 9,10,13}\\
+            	15.\ & x:Nat \vdash let\  y = pred\  x\  in\  if\  false\  then\  (x + y)\  else\  (0 \ast 5)\  end:Nat &\mathrm{(tlet) 6, 14}\\
+            	16.\ & \vdash let\  x = suc (2 \ast 1)\  in\  let\  y = pred\  x\  in\  if\  false\  then\  (x + y)\  else\  (0 \ast 5)\  end\  end:Nat &\mathrm{(tlet) 4, 15}
+            	\end{flalign*}
             	
             	}
             	
