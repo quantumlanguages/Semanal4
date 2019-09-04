@@ -20,6 +20,9 @@
 % manejo de tablas
 \usepackage{float}
 
+% árboles de dereivación
+\usepackage{ebproof}
+
 \begin{document}
     \title{
         Lenguajes de Programación \\
@@ -94,7 +97,191 @@
             	
             	%b
             	\item {
-            	Realiza la evaluación formal de $e_1$ y $e_2$ utilizando la semántica operacional ($\rightarrow$). Debe mostrar todos los pasos de derivación, anotando en cada uno de ellos el nombre de la regla utilizada.
+				Realiza la evaluación formal de $e_1$ y $e_2$ utilizando la 
+				semántica operacional ($\rightarrow$). Debe mostrar todos los 
+				pasos de derivación, anotando en cada uno de ellos el nombre de 
+				la regla utilizada.
+
+				Primero, se evalua un paso de la expresión condicional del $if$.
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$(esumaf)$] {2 + 5 \rightarrow 7}
+
+						\infer 1 [$(eisz)$] {iszero(2+5) \rightarrow iszero(7)}
+
+						\infer 1 [$(eif)$] 
+							{	
+								e_1
+								\rightarrow
+								if(iszero(7), let(3, x.suc(x)), pred(6+4)) = e_1^2
+							}
+					\end{prooftree}
+				\]
+
+				Otro paso de la expresión condicional.
+				\[
+					\begin{prooftree}
+						\infer 0 [$(eiszs)$] {iszero(7) \rightarrow false}
+
+						\infer 1 [$(eif)$] 
+							{	
+								e_1^2
+								\rightarrow
+								if(false, let(3, x.suc(x)), pred(6+4)) = e_1^3
+							}
+					\end{prooftree}
+				\]
+				
+
+				Luego, usando el valor de la expresión, se aplica la semántica
+				del $if$.
+				\[
+					\begin{prooftree}
+						\infer 0 [$(eiffalse)$] 
+						{	
+							e_1^3
+							\rightarrow
+							pred(6+4)
+						}
+					\end{prooftree}
+				\]
+
+				Luego se evalua un paso de la expresión resultante.
+				\[
+					\begin{prooftree}
+						\infer 0 [$(esumaf)$] {6 + 4 \rightarrow 10}
+
+						\infer 1 [$(epred)$] {pred(6 + 4) \rightarrow pred(10)}
+					\end{prooftree}
+				\]
+
+				Y se evalua otra vez, para obtener un valor finalmente.
+				\[
+					\begin{prooftree}
+
+						\infer 0 [$(epreds)$] {pred(10) \rightarrow 9}
+					\end{prooftree}
+				\]
+
+				Primero, se evalua un paso de la expresión a sustituir en el 
+				primer let.
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$(eprodf)$] {2*1 \rightarrow 2}
+
+						\infer 1 [$(esuc)$] {suc(2*1) \rightarrow suc(2)}
+
+						\infer 1 [$eleti$] {
+							e_2
+							\rightarrow
+							let(suc(2), x.let(pred(x), y.if(false, x+y, 0*5))) = e_2^2
+						}
+					\end{prooftree}	
+				\]
+
+				Otro paso
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$(esucn)$] {suc(2) \rightarrow 3}
+
+						\infer 1 [$eleti$] {
+							e_2^2
+							\rightarrow
+							let(3, x.let(pred(x), y.if(false, x+y, 0*5))) = e_2^3
+						}
+					\end{prooftree}	
+				\]
+
+				Luego, se transita a la sustitución del valor
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$eletf$] {
+							e_2^3
+							\rightarrow
+							let(pred(x), y.if(false, x+y, 0*5))[x:=3]
+						}
+					\end{prooftree}
+				\]
+
+				Luego, realicemos la sustitución.
+				\begin{align*}
+					&let(pred(x), y.if(false, x+y, 0*5))[x:=3] \\
+					&= let(pred(x)[x:=3], y.if(false, x+y, 0*5)[x:=3]) \\
+					&= let(pred(3), y.if(false[x:=3], x+y[x:=3], 0*5[x:=3])) \\
+					&= let(pred(3), y.if(false, x[x:=3]+y[x:=3], 0[x:=3]*5[x:=3])) \\
+					&= let(pred(3), y.if(false, 3+y, 0*5)) \\
+					&= e_2^4
+				\end{align*}
+
+				Ahora, hay que evaluar la expresión a sustituir en el $let$.
+
+				\[
+					\begin{prooftree}
+						
+						\infer 0 [$(epreds)$] {
+							pred(3)
+							\rightarrow
+							4
+						}
+
+						\infer 1 [$eleti$] {
+							e_2^4
+							\rightarrow
+							let(4, y.if(false, 3+y,0*5)) = e_2^5
+						}
+					\end{prooftree}
+				\]
+
+				Y transitar para realizar la sustitución.
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$(eletf)$] {
+							e_2^5
+							\rightarrow
+							if(false, 3+y, 0*5)[y:=4]
+						}
+					\end{prooftree}
+				\]
+
+				Que tiene como resultado
+
+				\begin{align*}
+					&if(false, 3+y, 0*5)[y:=4] \\
+					&=if(false[y:=4], (3+y)[y:=4], (0*5)[y:=4]) \\
+					&=if(false, 3[y:=4]+y[y:=4], 0[y:=4]*5[y:=4]) \\
+					&=if(false, 3+4, 0*5) = e_2^6
+				\end{align*}
+
+				Luego se elige transita a la expresión que indique la semántica
+				del $if$.
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$eiffalse$] {
+							e_2^6
+							\rightarrow
+							0*5
+						}
+					\end{prooftree}
+				\]
+
+				Que se evalua a
+
+				\[
+					\begin{prooftree}
+						\infer 0 [$eiffalse$] {
+							0*5
+							\rightarrow
+							0
+						}
+					\end{prooftree}
+				\]
+
             	}
             \end{enumerate}
         }
